@@ -124,3 +124,48 @@ The early stopping callback will run after every epoch.
 
 These parameters say: "If there hasn't been at least an improvement of 0.001 in the validation loss over the previous 20 epochs,
 then stop the training and keep the best model you found."
+
+
+-----------------------------------------------------------------------------------------------
+                            Dropout and Batch Normalization
+
+
+There are two kinds of special layers, not containing any neurons themselves,
+but that add some functionality that can sometimes benefit a model in various ways.
+Both are commonly used in modern architectures.
+
+The first of these is the "dropout layer", which can help correct overfitting.
+In the last lesson we talked about how overfitting is caused by the network learning spurious patterns in the training data.
+To recognize these spurious patterns a network will often rely on very a specific combinations of weight,
+a kind of "conspiracy" of weights. Being so specific, they tend to be fragile: remove one and the conspiracy falls apart.
+
+This is the idea behind dropout.
+To break up these conspiracies, we randomly drop out some fraction of a layer's input units every step of training,
+making it much harder for the network to learn those spurious patterns in the training data. Instead,
+it has to search for broad, general patterns, whose weight patterns tend to be more robust.
+
+You could also think about dropout as creating a kind of ensemble of networks.
+The predictions will no longer be made by one big network, but instead by a committee of smaller networks.
+Individuals in the committee tend to make different kinds of mistakes, but be right at the same time,
+making the committee as a whole better than any individual. 
+
+
+                            Batch Normalization
+The next special layer we'll look at performs "batch normalization" (or "batchnorm"),
+which can help correct training that is slow or unstable.
+
+With neural networks, it's generally a good idea to put all of your data on a common scale,
+perhaps with something like scikit-learn's StandardScaler or MinMaxScaler.
+The reason is that SGD will shift the network weights in proportion to how large an activation the data produces.
+Features that tend to produce activations of very different sizes can make for unstable training behavior.
+
+In fact, we have a special kind of layer that can do this, the batch normalization layer.
+A batch normalization layer looks at each batch as it comes in,
+first normalizing the batch with its own mean and standard deviation,
+and then also putting the data on a new scale with two trainable rescaling parameters.
+Batchnorm, in effect, performs a kind of coordinated rescaling of its inputs.
+
+Most often, batchnorm is added as an aid to the optimization process (though it can sometimes also help prediction performance).
+Models with batchnorm tend to need fewer epochs to complete training.
+Moreover, batchnorm can also fix various problems that can cause the training to get "stuck".
+Consider adding batch normalization to your models, especially if you're having trouble during training.
