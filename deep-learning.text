@@ -169,3 +169,28 @@ Most often, batchnorm is added as an aid to the optimization process (though it 
 Models with batchnorm tend to need fewer epochs to complete training.
 Moreover, batchnorm can also fix various problems that can cause the training to get "stuck".
 Consider adding batch normalization to your models, especially if you're having trouble during training.
+
+
+-----------------------------------------------------------------------------------------------
+                                Binary Classification
+
+In raw data, the classes might be represented by strings like "Yes" and "No", or "Dog" and "Cat".
+Before using this data we'll assign a class label: one class will be 0 and the other will be 1.
+Assigning numeric labels puts the data in a form a neural network can use.
+
+The problem with accuracy (and most other classification metrics) is that it can't be used as a loss function.
+SGD needs a loss function that changes smoothly, but accuracy, being a ratio of counts, changes in "jumps".
+So, we have to choose a substitute to act as the loss function. This substitute is the cross-entropy function.
+
+With regression, our goal was to minimize the distance between the expected outcome and the predicted outcome.
+We chose MAE to measure this distance. The idea is that we want our network to predict the correct class with probability 1.0.
+The further away the predicted probability is from 1.0, the greater will be the cross-entropy loss.
+
+The cross-entropy and accuracy functions both require probabilities as inputs, meaning, numbers from 0 to 1.
+To covert the real-valued outputs produced by a dense layer into probabilities,
+we attach a new kind of activation function, the sigmoid activation.
+
+To get the final class prediction, we define a threshold probability.
+Typically this will be 0.5, so that rounding will give us the correct class:
+below 0.5 means the class with label 0 and 0.5 or above means the class with label 1.
+A 0.5 threshold is what Keras uses by default with its accuracy metric.
